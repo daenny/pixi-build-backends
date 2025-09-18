@@ -195,11 +195,10 @@ def _format_version_constraints_to_string(dependency: Dependency) -> str:
         except TypeError as e:
             raise ValueError(
                 f"Incorrect version specification in package.xml: '{dependency.name}' at version '{version}' "
-                f"(Versions should start with a digit, not '{version[0]}')"
             ) from e
 
     if dependency.version_eq:
-        return f"=={dependency.version_eq}"
+        return f" =={dependency.version_eq}"
 
     version_string_list = []
     if dependency.version_gte:
@@ -256,7 +255,6 @@ def package_xml_to_conda_requirements(
     cond = ConditionalRequirements()
     # TODO: should we add all build dependencies to the host requirements?
     cond.host = build_requirements
-    # assert False, "HERE I FAIL before CONDA.BUILD"
     cond.build = build_requirements
     cond.run = run_requirements
 
