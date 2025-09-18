@@ -23,6 +23,7 @@ ruff = "*"
 pixi-pycharm = ">=0.0.8,<0.1"
 pytest = "*"
 py-pixi-build-backend = { path = "../../py-pixi-build-backend" }
+syrupy = ">=4.9.1,<5"
 
 [package.build.backend]
 name = "pixi-build-python"
