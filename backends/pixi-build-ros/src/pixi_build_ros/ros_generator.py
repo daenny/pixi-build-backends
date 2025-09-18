@@ -56,7 +56,7 @@ class ROSBackendConfig(pydantic.BaseModel, extra="forbid"):
     # ROS distribution to use, e.g., "foxy", "galactic", "humble"
     # TODO: This should be figured out in some other way, not from the config.
     distro: Optional[str] = None
-
+    mutex_version: Optional[str] = pydantic.Field(default=None, alias="mutex-version")
     # Extra package mappings to use in the build
     extra_package_mappings: List[Path] = pydantic.Field(default_factory=list, alias="extra-package-mappings")
 
@@ -161,6 +161,11 @@ class ROSGenerator(GenerateRecipeProtocol):
         package_requirements.build.append(ItemPackageDependency("${{ compiler('cxx') }}"))
 
         host_deps = ["python", "numpy", "pip", "pkg-config"]
+
+        mutex_string = distro.ros_distro_mutex_name
+        if backend_config.mutex_version:
+            mutex_string += f" {backend_config.mutex_version}"
+        host_deps.append(mutex_string)
 
         for dep in host_deps:
             package_requirements.host.append(ItemPackageDependency(name=dep))
