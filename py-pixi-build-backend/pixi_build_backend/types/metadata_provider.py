@@ -2,7 +2,7 @@
 Python metadata provider types and protocols.
 """
 
-from typing import Optional, Protocol
+from typing import List, Optional, Protocol
 
 
 class MetadataProvider(Protocol):
@@ -47,4 +47,8 @@ class MetadataProvider(Protocol):
 
     def repository(self) -> Optional[str]:
         """Return the repository URL or None if not available."""
+        return None
+
+    def maintainers(self) -> Optional[List[str]]:
+        """Return the list of maintainers or None if not available."""
         return None
