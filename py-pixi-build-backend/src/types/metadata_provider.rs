@@ -157,6 +157,19 @@ impl MetadataProvider for PyMetadataProvider {
             }
         })
     }
+
+    fn maintainers(&mut self) -> Result<Vec<String>, Self::Error> {
+        Python::attach(|py| {
+            let result = self.inner.call_method0(py, "maintainers")?;
+
+            if result.is_none(py) {
+                Ok(Vec::new())
+            } else {
+                let maintainers: Vec<String> = result.extract(py)?;
+                Ok(maintainers)
+            }
+        })
+    }
 }
 
 /// Helper function to get input globs from a Python metadata provider

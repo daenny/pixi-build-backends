@@ -2,7 +2,7 @@ use miette::Diagnostic;
 use pixi_build_types::ProjectModelV1;
 use rattler_build::{NormalizedKey, recipe::variable::Variable};
 use rattler_conda_types::{Platform, Version};
-use recipe_stage0::recipe::{About, IntermediateRecipe, Package, Value};
+use recipe_stage0::recipe::{About, Extra, IntermediateRecipe, Item, Package, Value};
 use serde::de::DeserializeOwned;
 use std::collections::HashSet;
 use std::{
@@ -196,10 +196,28 @@ impl GeneratedRecipe {
                 .map(Value::Concrete),
         };
 
+        let extra = {
+            let maintainers = provider.maintainers().map_err(|e| {
+                GenerateRecipeError::MetadataProviderError(String::from("maintainers"), e)
+            })?;
+
+            if maintainers.is_empty() {
+                None
+            } else {
+                Some(Extra {
+                    recipe_maintainers: maintainers
+                        .into_iter()
+                        .map(|maintainer| Item::Value(Value::Concrete(maintainer)))
+                        .collect(),
+                })
+            }
+        };
+
         let ir = IntermediateRecipe {
             package,
             requirements,
             about: Some(about),
+            extra,
             ..Default::default()
         };
 
@@ -252,6 +270,9 @@ pub trait MetadataProvider {
     }
     fn repository(&mut self) -> Result<Option<String>, Self::Error> {
         Ok(None)
+    }
+    fn maintainers(&mut self) -> Result<Vec<String>, Self::Error> {
+        Ok(Vec::new())
     }
 }
 

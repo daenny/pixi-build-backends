@@ -156,6 +156,22 @@ class PackageXmlMetadataProvider(MetadataProvider):
         """Return the repository URL from package.xml."""
         return self._package_xml_data.repository
 
+    def maintainers(self) -> Optional[List[str]]:
+        """Return maintainers from package.xml as formatted strings."""
+        maintainers: List[str] = []
+        for maintainer in self._package_xml_data.maintainers:
+            name = maintainer.name.strip() if maintainer.name else ""
+            email = maintainer.email.strip() if maintainer.email else ""
+
+            if name and email:
+                maintainers.append(f"{name} <{email}>")
+            elif name:
+                maintainers.append(name)
+            elif email:
+                maintainers.append(email)
+
+        return maintainers or None
+
     def input_globs(self) -> List[str]:
         """Return input globs that affect this metadata provider."""
         return [
