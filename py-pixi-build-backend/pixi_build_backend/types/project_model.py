@@ -35,6 +35,34 @@ class ProjectModelV1:
         instance._inner = model
         return instance
 
+    @classmethod
+    def from_json(cls, json: str) -> "ProjectModelV1":
+        """Create a ProjectModelV1 from a JSON document."""
+        instance = cls.__new__(cls)
+        instance._inner = PyProjectModelV1.from_json(json)
+        return instance
+
+    @classmethod
+    def from_json_file(cls, path: str) -> "ProjectModelV1":
+        """Create a ProjectModelV1 from a JSON file."""
+        instance = cls.__new__(cls)
+        instance._inner = PyProjectModelV1.from_json_file(path)
+        return instance
+
+    @classmethod
+    def from_test_json(cls, json: str) -> "ProjectModelV1":
+        """Create a ProjectModelV1 from a test JSON document."""
+        instance = cls.__new__(cls)
+        instance._inner = PyProjectModelV1.from_test_json(json)
+        return instance
+
+    @classmethod
+    def from_test_json_file(cls, path: str) -> "ProjectModelV1":
+        """Create a ProjectModelV1 from a test JSON file."""
+        instance = cls.__new__(cls)
+        instance._inner = PyProjectModelV1.from_test_json_file(path)
+        return instance
+
     @property
     def version(self) -> Optional[str]:
         """
