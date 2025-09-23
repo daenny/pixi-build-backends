@@ -173,10 +173,10 @@ def test_recipe_includes_pixi_run_dependency(package_xmls: Path, test_data_dir: 
             "description": "Demo",
             "authors": ["Tester the Tester"],
             "targets": {
-                "default_target": {
-                    "host_dependencies": {},
-                    "build_dependencies": {},
-                    "run_dependencies": {
+                "defaultTarget": {
+                    "hostDependencies": {},
+                    "buildDependencies": {},
+                    "runDependencies": {
                         dep: {"binary": {"version": str(spec)}}
                         for dep, spec in run_dependencies.items()
                     },
@@ -184,7 +184,7 @@ def test_recipe_includes_pixi_run_dependency(package_xmls: Path, test_data_dir: 
                 "targets": {},
             },
         }
-        model = ProjectModelV1.from_test_json(json.dumps(model_payload))
+        model = ProjectModelV1.from_json(json.dumps(model_payload))
 
         config = {"distro": "noetic", "noarch": False}
         host_platform = Platform.current()
